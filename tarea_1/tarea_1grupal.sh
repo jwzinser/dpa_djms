@@ -17,3 +17,5 @@ echo "La descarga pesa:" $peso
 numarch=$(ls *.zip | wc -l)
 echo "Número de archivos:" $numarch
 
+# A base sqlite
+parallel zgrep -e "Mexico" *.zip | csvsql --db sqlite:///industry_data.db --insert 
