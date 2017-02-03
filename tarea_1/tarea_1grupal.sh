@@ -20,5 +20,5 @@ numarch=$(ls *.zip | wc -l)
 echo "Número de archivos:" $numarch
 
 # A base sqlite
-ls *.zip | parallel -j100 zgrep -e "Mexico" | csvsql --db sqlite:///gdelt.db --table mexico --insert
+ls *.zip | parallel -j100 zgrep -e "Mexico" | csvsql --db sqlite:///gdelt.db --no-header-row --table mexico --insert
 #parallel zgrep -e "Mexico" *.zip | csvsql --db sqlite:///industry_data.db --insert 
