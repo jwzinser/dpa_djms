@@ -4,6 +4,8 @@
 # Sonia Mendizabal
 # Juan Zinzer
 
+#!/bin/sh
+
 
 # TAREA 1
 # Descarga de archivos
@@ -18,4 +20,5 @@ numarch=$(ls *.zip | wc -l)
 echo "Número de archivos:" $numarch
 
 # A base sqlite
-parallel zgrep -e "Mexico" *.zip | csvsql --db sqlite:///industry_data.db --insert 
+ls *.zip | parallel -j100 zgrep -e "Mexico" | csvsql --db sqlite:///gdelt.db --table mexico --insert
+#parallel zgrep -e "Mexico" *.zip | csvsql --db sqlite:///industry_data.db --insert 
