@@ -31,11 +31,8 @@ Cada uno de los archivos viene en formato =YYYYMMDD.export.CSV.zip=
 
 #+END_SRC
 
+---
 
-http http://data.gdeltproject.org/events/index.html/
+### Código
 
-
-
-http http://data.gdeltproject.org/events/index.html | grep -oP '(?<=<A> ).*?(?= </A>)'
-
-http http://data.gdeltproject.org/events/index.html | grep -e '201612' | hxselect '#HREF'
+http http://data.gdeltproject.org/events/index.html | grep -Po '201(612|7..)[0-9][0-9]\.export.CSV.zip' | uniq | awk '{print "http://data.gdeltproject.org/events/"$1}' | parallel wget
