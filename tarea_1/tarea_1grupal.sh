@@ -24,7 +24,11 @@ ls *.zip | parallel -j100 zgrep -e "Mexico" | csvsql --db sqlite:///gdelt.db --n
 #parallel zgrep -e "Mexico" *.zip | csvsql --db sqlite:///industry_data.db --insert
 #
 
+sql2csv --db sqlite:///gdelt.db --query  "drop table mexico_ts;"
+sql2csv --db sqlite:///gdelt.db --query  "create table mexico_ts('date', 'events', 'goldstein_score');"
+sql2csv --db sqlite:///gdelt.db --query  "INSERT INTO mexico_ts ('date', 'events', 'goldstein_score') select column57 as date, count(*) as events, avg(column31) as goldstein_score from mexico group by date;"
 
-sql2csv --db sqlite:///gdelt.db --query  "create table mexico_ts(date, events, goldstein_score);"
-sql2csv --db sqlite:///gdelt.db --query  "INSERT INTO mexico_ts [(date, events, goldstein_score)] select '20161203' as date, count(*) as cuantos, avg('4.0') from mexico group by date;"
-sql2csv --db sqlite:///gdelt.db --query "select `20161203` as date, count(*) as cuantos, avg(`4.0`) from mexico group by date;"
+
+sql2csv --db sqlite:///gdelt.db --query  "drop table mexico_ts;"
+sql2csv --db sqlite:///gdelt.db --query "select column57 as date, count(*) as events, avg(column31) as goldstein_score  from mexico group by date;" | tee | csvsql --db sqlite:///gdelt.db  --table mexico_ts --insert
+sql2csv --db sqlite:///gdelt.db --query "select column57 as date, count(*) as events, avg(column31) as goldstein_score  from mexico group by date;"  | csvsql --db sqlite:///gdelt.db  --table mexico_ts_2 --insert
