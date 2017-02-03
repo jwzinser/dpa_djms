@@ -29,6 +29,9 @@ Cada uno de los archivos viene en formato =YYYYMMDD.export.CSV.zip=
 - Al comando anterior agrega =tee= y guarda en otra *tabla* (llamada
   =mexico_ts=) el número de eventos por día y la escala de goldstein
 
+
+
+
 #+END_SRC
 
 ---

@@ -21,4 +21,10 @@ echo "Número de archivos:" $numarch
 
 # A base sqlite
 ls *.zip | parallel -j100 zgrep -e "Mexico" | csvsql --db sqlite:///gdelt.db --no-header-row --table mexico --insert
-#parallel zgrep -e "Mexico" *.zip | csvsql --db sqlite:///industry_data.db --insert 
+#parallel zgrep -e "Mexico" *.zip | csvsql --db sqlite:///industry_data.db --insert
+#
+
+
+sql2csv --db sqlite:///gdelt.db --query  "create table mexico_ts(date, events, goldstein_score);"
+sql2csv --db sqlite:///gdelt.db --query  "INSERT INTO mexico_ts [(date, events, goldstein_score)] select '20161203' as date, count(*) as cuantos, avg('4.0') from mexico group by date;"
+sql2csv --db sqlite:///gdelt.db --query "select `20161203` as date, count(*) as cuantos, avg(`4.0`) from mexico group by date;"
