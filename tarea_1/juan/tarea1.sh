@@ -22,7 +22,6 @@ for i in $categories; do
         arr=$(declare -p $col_val  | jq '.[0]' | grep -q '^declare \-a' && echo array || echo no array)
         if [$arr=='no array']
             then
-                echo 'la verga'
                 cand_col+=("$col")
         fi
     done
