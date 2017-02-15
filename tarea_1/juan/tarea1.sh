@@ -27,19 +27,19 @@ for i in $categories; do
 
     # unicamente las columnas validas, es decir, las que no son url
     all_cols=$(cat "$key_name.json" | jq '. |(map(keys) | add | unique)| .[]')
-    cand_col=$()
+    cand_col=()
     for col in $all_cols; do
         FOUND=$(echo "${array[*]}" | grep -o $(echo $col| jq -r '.') )
         if [[ ${#FOUND} == 0 ]]; then
             col=$(echo $col | jq  '.')
-            echo "$col"
-            cand_col=$(echo $($cand_col) | jq --arg cand_col "$cand_col" '[$cand_col]')
-            cand_col=$(|= .+ [...])
+            cand_col+=("$col")
         fi
     done
-    echo $cand_col
-    cat "$key_name.json" | jq -r --arg cand_col "$cand_col" '. | [$cand_col] as $cols | map(. as $row | $cols | map($row[.])) as $rows | $cols, $rows[] | @csv' | csvsql --db sqlite:///star_wars.db --tables $key_name --insert
-    #cat $key_name.json | jq -r '.' | in2csv -f json | csvsql --db sqlite:///star_wars.db --tables $key_name --insert
+
+    cand_col=$(echo "${cand_col[*]}" | tr ' ' ',' |sed 's/^/[/'|sed 's/$/]/'|jq '.')
+    #cat "$key_name.json" | jq -r  --arg cand_col "$cand_col" '. | [(map($cand_col) | add | unique)] as $cols |map(. as $row | $cols | map($row[.])) as $rows | $cols, $rows[] | @csv' | csvsql --db sqlite:///star_wars.db --tables $key_name --insert
+    #cat "$key_name.json" | jq -r --arg cand_col "$cand_col" '. | ["${cand_col[*]}"] as $cols | map(. as $row | $cols | map($row[.])) as $rows | $cols, $rows[] | @csv' | csvsql --db sqlite:///star_wars.db --tables $key_name --insert
+    cat $key_name.json | jq -r '.' | in2csv -f json | csvsql --db sqlite:///star_wars.db --tables $key_name --insert
 done
 
 
