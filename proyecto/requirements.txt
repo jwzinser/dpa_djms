@@ -1,0 +1,13 @@
+cython
+pandas
+numpy
+scrapy
+nltk
+wordcloud
+matplotlib
+image
+sklearn
+gensim
+cvxopt
+oct2py
+pyprind
